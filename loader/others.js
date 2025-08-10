@@ -252,7 +252,6 @@ function setupPageTransition() {
   });
 }
 
-// --- Breakpoint reload ---
 const BREAKPOINTS = {
   mobile: { min: 0, max: 767 },
   tablet: { min: 768, max: 1023 },
@@ -260,18 +259,12 @@ const BREAKPOINTS = {
 };
 function getBreakpoint() {
   const w = window.innerWidth;
-  if (w <= BREAKPOINTS.mobile.max) return "mobile";
-  if (w <= BREAKPOINTS.tablet.max) return "tablet";
-  return "desktop";
+  if (w >= BREAKPOINTS.mobile.min && w <= BREAKPOINTS.mobile.max) return "mobile";
+  if (w >= BREAKPOINTS.tablet.min && w <= BREAKPOINTS.tablet.max) return "tablet";
+  if (w >= BREAKPOINTS.desktop.min) return "desktop";
+  return "desktop"; // fallback
 }
-let prevBreakpoint = getBreakpoint();
-window.addEventListener("resize", () => {
-  const bp = getBreakpoint();
-  if (bp !== prevBreakpoint) {
-    sessionStorage.removeItem("hasRunLoader");
-    location.reload();
-  }
-});
+
 
 // --- Loader and Transition Control ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -326,3 +319,4 @@ window.addEventListener('pageshow', (event) => {
   }
 
 });
+
