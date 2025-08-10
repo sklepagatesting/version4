@@ -252,6 +252,27 @@ function setupPageTransition() {
   });
 }
 
+// --- Breakpoint reload ---
+const BREAKPOINTS = {
+  mobile: { min: 0, max: 767 },
+  tablet: { min: 768, max: 1023 },
+  desktop: { min: 1024, max: Infinity }
+};
+function getBreakpoint() {
+  const w = window.innerWidth;
+  if (w <= BREAKPOINTS.mobile.max) return "mobile";
+  if (w <= BREAKPOINTS.tablet.max) return "tablet";
+  return "desktop";
+}
+let prevBreakpoint = getBreakpoint();
+window.addEventListener("resize", () => {
+  const bp = getBreakpoint();
+  if (bp !== prevBreakpoint) {
+    sessionStorage.removeItem("hasRunLoader");
+    location.reload();
+  }
+});
+
 // --- Loader and Transition Control ---
 document.addEventListener('DOMContentLoaded', () => {
   if (shouldRunLoader) {
@@ -303,4 +324,5 @@ window.addEventListener('pageshow', (event) => {
     document.body.style.overflow = "auto";
     document.body.classList.remove("preload");
   }
+
 });
